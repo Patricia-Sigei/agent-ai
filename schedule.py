@@ -3,11 +3,11 @@ import smtplib
 from email.message import EmailMessage
 from email.utils import formataddr
 from pathlib import Path
-
+import ssl 
 from dotenv import load_dotenv
 
 
-PORT = 587
+PORT = 465
 EMAIL_SERVER = "smtp.gmail.com"
 
 current_dir = Path(__file__).resolve().parent if __file__ in locals() else Path.cwd()
@@ -18,6 +18,11 @@ load_dotenv(vars)
 
 sender_email = os.getenv("EMAIL")
 password_email = os.getenv("PASSWORD")
+
+
+print("Email loaded:", bool(sender_email))
+print("Password loaded:", bool(password_email))
+print("Email address:", sender_email)
 
 
 
@@ -50,6 +55,7 @@ def send_email(subject, receiver_email, name, due_date, invoice_no, amount):
     Accounts Department
     """
     )
+
     msg.add_alternative(
     f"""
     <html>
@@ -90,11 +96,24 @@ def send_email(subject, receiver_email, name, due_date, invoice_no, amount):
     subtype="html",
    )
 
-    with smtplib.SMTP(EMAIL_SERVER, PORT) as server:
-        server.starttls()
-        server.login(sender_email, password_email)
-        server.sendmail(sender_email, receiver_email, msg.as_string())
+    context = ssl.create_default_context()
 
+    with smtplib.SMTP_SSL(
+    EMAIL_SERVER,
+    PORT,
+    context=context,
+    timeout=30
+) as server:
 
+     server.login(sender_email, password_email)
+     server.send_message(msg)
 
-    if __name__== "__main__":
+if __name__== "__main__":
+    send_email(
+            subject= "Payment Reminder", 
+            name= "Patricia", 
+            receiver_email= "chelangat.patriciasigei@gmail.com", 
+            due_date= "24/11/2026",
+            invoice_no= "INV-11-2026", 
+            amount= "200", 
+        )
