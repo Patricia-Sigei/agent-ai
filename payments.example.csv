@@ -1,0 +1,4 @@
+name,email,amount,invoice_no,due_date,reminder_date,has_paid,reminder_sent
+John Doe,johndoe@gmail.com,1000,INV-001,26/11/2026,24/11/2026,no,no
+Jane Doe,janedoe@gmail.com,500,INV-002,28/11/2026,24/11/2026,no,no
+Catherine,catherinehowell@gmail.com,2000,INV-003,28/11/2027,24/11/2027,yes,no
