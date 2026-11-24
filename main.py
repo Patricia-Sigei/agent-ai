@@ -11,10 +11,6 @@ def load():
      dayfirst=True)
     return df
 
-df = load()
-
-print(df)
-
 
 def query(df):
     today = pd.Timestamp.today().normalize()
@@ -27,3 +23,29 @@ def query(df):
 
     return query
 
+
+def send_reminders(df):
+    email_counter = 0
+
+    reminders = query(df)
+
+    for index, row in reminders.iterrows():
+
+        send_email(
+            subject="Payment Reminder",
+            receiver_email=row["email"],
+            name=row["name"],
+            due_date=row["due_date"].strftime("%d/%m/%Y"),
+            invoice_no=row["invoice_no"],
+            amount=row["amount"]
+        )
+
+        email_counter += 1
+
+        df.loc[index, "reminder_sent"] = "yes"
+
+    df.to_csv("payments.csv", index=False)
+
+    print(f"Total emails sent: {email_counter}")
+
+    
