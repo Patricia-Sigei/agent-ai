@@ -16,3 +16,12 @@ df = load()
 print(df)
 
 
+def unpaid_customers(df):
+    today = pd.Timestamp.today().normalize()
+
+    unpaid = df[
+        (df["has_paid"].str.strip().str.lower() == "no") &
+        (df["reminder_date"] <= today)
+    ]
+
+    return unpaid
