@@ -1,7 +1,7 @@
 
 from datetime import date
 import pandas as pd
-from schedule import send_email
+from email_sender import send_email
 
 
 
@@ -48,4 +48,6 @@ def send_reminders(df):
 
     print(f"Total emails sent: {email_counter}")
 
-    
+df = load()
+
+send_reminders(df)
